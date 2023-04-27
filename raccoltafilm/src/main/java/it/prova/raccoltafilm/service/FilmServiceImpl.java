@@ -125,8 +125,21 @@ public class FilmServiceImpl implements FilmService {
 
 	@Override
 	public List<Film> findByExample(Film example) throws Exception {
-		// da implementare
-		return this.listAllElements();
+		EntityManager entityManager = LocalEntityManagerFactoryListener.getEntityManager();
+
+		try {
+			// uso l'injection per il dao
+			filmDAO.setEntityManager(entityManager);
+
+			// eseguo quello che realmente devo fare
+			return filmDAO.findByExample(example);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			LocalEntityManagerFactoryListener.closeEntityManager(entityManager);
+		}
 	}
 
 }

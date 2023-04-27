@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang3.StringUtils;
 
+import it.prova.raccoltafilm.model.Film;
 import it.prova.raccoltafilm.model.Regista;
 
 public class RegistaDAOImpl implements RegistaDAO {
@@ -94,4 +95,8 @@ public class RegistaDAOImpl implements RegistaDAO {
 
 	}
 
+	public Optional<Regista> findOneRegistaEager(Long id) throws Exception {
+		return entityManager.createQuery("from Regista  where id=:idRegista", Regista.class)
+				.setParameter("idRegista", id).getResultList().stream().findFirst();
+	}
 }

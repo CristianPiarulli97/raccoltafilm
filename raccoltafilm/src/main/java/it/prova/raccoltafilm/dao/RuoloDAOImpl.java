@@ -60,4 +60,5 @@ public class RuoloDAOImpl implements RuoloDAO {
 		return query.getResultStream().findFirst().orElse(null);
 	}
 
+	
 }

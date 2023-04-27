@@ -1,11 +1,18 @@
 package it.prova.raccoltafilm.dao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
+import org.apache.commons.lang3.StringUtils;
 
 import it.prova.raccoltafilm.model.Film;
+import it.prova.raccoltafilm.model.Regista;
 
 public class FilmDAOImpl implements FilmDAO {
 
@@ -45,6 +52,7 @@ public class FilmDAOImpl implements FilmDAO {
 	public void delete(Film filmInstance) throws Exception {
 		if (filmInstance == null) {
 			throw new Exception("Problema valore in input");
+			
 		}
 		entityManager.remove(entityManager.merge(filmInstance));
 
@@ -56,4 +64,44 @@ public class FilmDAOImpl implements FilmDAO {
 				.setParameter("idFilm", id).getResultList().stream().findFirst();
 	}
 
+	public List<Film> findByExample(Film example) throws Exception {
+
+		Map<String, Object> paramaterMap = new HashMap<String, Object>();
+		List<String> whereClauses = new ArrayList<String>();
+
+		StringBuilder queryBuilder = new StringBuilder("select r from Film r where r.id = r.id ");
+
+		if (StringUtils.isNotEmpty(example.getTitolo())) {
+			whereClauses.add(" r.titolo  like :titolo ");
+			paramaterMap.put("titolo", "%" + example.getTitolo() + "%");
+		}
+		if (StringUtils.isNotEmpty(example.getGenere())) {
+			whereClauses.add(" r.genere like :genere ");
+			paramaterMap.put("genere", "%" + example.getGenere() + "%");
+		}
+		
+		if (example.getMinutiDurata() != null) {
+			whereClauses.add(" r.minutiDurata =:minutiDurata ");
+			paramaterMap.put("minutiDurata", example.getMinutiDurata());
+		}
+		if (example.getDataPubblicazione() != null) {
+			whereClauses.add("r.dataPubblicazione >= :dataPubblicazione ");
+			paramaterMap.put("dataPubblicazione", example.getDataPubblicazione());
+		}
+
+		
+		
+		
+		
+		queryBuilder.append(!whereClauses.isEmpty() ? " and " : "");
+		queryBuilder.append(StringUtils.join(whereClauses, " and "));
+		TypedQuery<Film> typedQuery = entityManager.createQuery(queryBuilder.toString(), Film.class);
+
+		for (String key : paramaterMap.keySet()) {
+			typedQuery.setParameter(key, paramaterMap.get(key));
+		}
+
+		return typedQuery.getResultList();
+	}
+	
 }

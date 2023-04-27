@@ -35,8 +35,11 @@ public class RegistaDAOImpl implements RegistaDAO {
 	}
 
 	@Override
-	public void update(Regista o) throws Exception {
-		// TODO Auto-generated method stub
+	public void update(Regista input) throws Exception {
+		if (input == null) {
+			throw new Exception("Problema valore in input");
+		}
+		input = entityManager.merge(input);
 
 	}
 
@@ -98,5 +101,15 @@ public class RegistaDAOImpl implements RegistaDAO {
 	public Optional<Regista> findOneRegistaEager(Long id) throws Exception {
 		return entityManager.createQuery("from Regista  where id=:idRegista", Regista.class)
 				.setParameter("idRegista", id).getResultList().stream().findFirst();
+	}
+
+	@Override
+	public Regista findIdWithFilms(Long id) {
+		TypedQuery<Regista> query = entityManager
+				.createQuery("select r from Regista r left join fetch r.films f where r.id = ?1", Regista.class);
+		query.setParameter(1, id);
+
+		return query.getResultStream().findFirst().orElse(null);
+		
 	}
 }

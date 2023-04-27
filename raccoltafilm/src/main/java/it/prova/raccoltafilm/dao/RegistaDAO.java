@@ -9,4 +9,6 @@ public interface RegistaDAO extends IBaseDAO<Regista> {
 	public List<Regista> findByExample(Regista example) throws Exception;
 	
 	public Optional<Regista> findOneRegistaEager(Long id) throws Exception;
+
+	public Regista findIdWithFilms(Long id);
 	}

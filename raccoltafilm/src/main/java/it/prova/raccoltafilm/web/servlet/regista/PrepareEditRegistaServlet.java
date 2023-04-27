@@ -13,39 +13,36 @@ import it.prova.raccoltafilm.service.MyServiceFactory;
 import it.prova.raccoltafilm.service.RegistaService;
 
 /**
- * Servlet implementation class ExecuteVisualizzaRegistaServlet
+ * Servlet implementation class PrepareEditRegistaServlet
  */
-@WebServlet("/ExecuteVisualizzaRegistaServlet")
-public class ExecuteVisualizzaRegistaServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-
-	private RegistaService registaService;
+@WebServlet("/PrepareEditRegistaServlet")
+public class PrepareEditRegistaServlet extends HttpServlet {
+private static final long serialVersionUID = 1L;
 	
-
-	public ExecuteVisualizzaRegistaServlet() {
+	private RegistaService registaService;
+ 
+	public PrepareEditRegistaServlet() {
 		this.registaService = MyServiceFactory.getRegistaServiceInstance();
 	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String idRegistaParam = request.getParameter("idRegista");
 		if (!NumberUtils.isCreatable(idRegistaParam)) {
-			request.setAttribute("errorMessage", "Attenzione si è verificato un errore.");
+			request.setAttribute("errorMessage","Attenzione si è verificato un errore.");
 			request.getRequestDispatcher("home").forward(request, response);
-			return;
 		}
-
 		Long idRegista = Long.parseLong(idRegistaParam);
+		
 		try {
-			request.setAttribute("show_regista_attr", registaService.caricaSingoloElementoConFilms(idRegista));
+			request.setAttribute("edit_regista_attr", registaService.caricaSingoloElemento(idRegista));
 		} catch (Exception e) {
 			e.printStackTrace();
-			request.setAttribute("errorMessage", "Attenzione si è verificato un errore.");
+			request.setAttribute("errorMessage","Attenzione si è verificato un errore.");
 			request.getRequestDispatcher("home").forward(request, response);
 			return;
 		}
-		
-		request.getRequestDispatcher("/regista/show.jsp").forward(request, response);
+		request.getRequestDispatcher("/regista/edit.jsp").forward(request, response);
 	}
+
+
 }

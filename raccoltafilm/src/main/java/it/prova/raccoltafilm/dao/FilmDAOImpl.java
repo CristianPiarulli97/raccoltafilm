@@ -69,29 +69,31 @@ public class FilmDAOImpl implements FilmDAO {
 		Map<String, Object> paramaterMap = new HashMap<String, Object>();
 		List<String> whereClauses = new ArrayList<String>();
 
-		StringBuilder queryBuilder = new StringBuilder("select r from Film r where r.id = r.id ");
+		StringBuilder queryBuilder = new StringBuilder("select f from Film f where f.id = f.id ");
 
+		
 		if (StringUtils.isNotEmpty(example.getTitolo())) {
-			whereClauses.add(" r.titolo  like :titolo ");
+			whereClauses.add(" f.titolo  like :titolo ");
 			paramaterMap.put("titolo", "%" + example.getTitolo() + "%");
 		}
 		if (StringUtils.isNotEmpty(example.getGenere())) {
-			whereClauses.add(" r.genere like :genere ");
+			whereClauses.add(" f.genere like :genere ");
 			paramaterMap.put("genere", "%" + example.getGenere() + "%");
 		}
 		
 		if (example.getMinutiDurata() != null) {
-			whereClauses.add(" r.minutiDurata =:minutiDurata ");
+			whereClauses.add(" f.minutiDurata =:minutiDurata ");
 			paramaterMap.put("minutiDurata", example.getMinutiDurata());
 		}
 		if (example.getDataPubblicazione() != null) {
-			whereClauses.add("r.dataPubblicazione >= :dataPubblicazione ");
+			whereClauses.add("f.dataPubblicazione >= :dataPubblicazione ");
 			paramaterMap.put("dataPubblicazione", example.getDataPubblicazione());
 		}
 
-		
-		
-		
+		if (example.getRegista() != null) {
+			whereClauses.add(" f.regista =:regista ");
+			paramaterMap.put("regista", example.getRegista());
+		}
 		
 		queryBuilder.append(!whereClauses.isEmpty() ? " and " : "");
 		queryBuilder.append(StringUtils.join(whereClauses, " and "));

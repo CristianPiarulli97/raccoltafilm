@@ -11,4 +11,7 @@ public interface RegistaDAO extends IBaseDAO<Regista> {
 	public Optional<Regista> findOneRegistaEager(Long id) throws Exception;
 
 	public Regista findIdWithFilms(Long id);
+	
+	public Regista findByIdEager(Long idRegista) throws Exception ;
+
 	}

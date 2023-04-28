@@ -55,5 +55,4 @@ public class PrepareDeleteFilmServlet extends HttpServlet {
 
 		request.getRequestDispatcher("/film/delete.jsp").forward(request, response);
 	}
-
 }

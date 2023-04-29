@@ -43,6 +43,15 @@ public class Utente {
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 
+	
+	
+	public Utente(String username, String password, String nome) {
+		super();
+		this.username = username;
+		this.password = password;
+		this.nome = nome;
+	}
+
 	public Utente() {
 	}
 
@@ -60,6 +69,8 @@ public class Utente {
 		this.dateCreated = dateCreated;
 	}
 
+	
+	
 	public Long getId() {
 		return id;
 	}
